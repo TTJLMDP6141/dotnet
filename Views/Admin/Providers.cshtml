@@ -1,0 +1,13 @@
+@model List<ProviderProfile>
+@{
+    ViewData["Title"] = "Providers";
+}
+<div class="dashboard-heading"><div><span class="eyebrow">SERVICE PARTNERS</span><h1>Providers</h1></div><a asp-action="Index" class="btn btn-outline-primary">← Dashboard</a></div>
+<section class="panel mt-4">
+    <div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Experience</th><th>Availability</th></tr></thead><tbody>
+    @foreach (var provider in Model)
+    {
+        <tr><td>@provider.User.FullName</td><td>@provider.User.Email</td><td>@provider.User.PhoneNumber</td><td>@provider.Experience years</td><td>@provider.Availability</td></tr>
+    }
+    </tbody></table></div>
+</section>

@@ -1,0 +1,35 @@
+@model AdminBookingsVm
+@{
+    ViewData["Title"] = "Manage bookings";
+    var statuses = (BookingStatus[])ViewBag.Statuses;
+}
+<div class="dashboard-heading"><div><span class="eyebrow">OPERATIONS</span><h1>Manage bookings</h1><p class="text-secondary mb-0">Assign a provider or update an appointment status.</p></div><a asp-action="Index" class="btn btn-outline-primary">← Dashboard</a></div>
+<section class="panel mt-4">
+    @if (Model.Bookings.Count == 0)
+    {
+        <div class="empty-inline">No bookings to manage yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Customer</th><th>Service / schedule</th><th>Provider</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+        @foreach (var booking in Model.Bookings)
+        {
+            <tr>
+                <td>@booking.Customer.FullName<br /><small class="text-secondary">@booking.Phone</small></td>
+                <td><strong>@booking.Service.Name</strong><br /><small class="text-secondary">@booking.BookingDate.ToString("dd MMM yyyy") · @booking.BookingTime</small></td>
+                <td>
+                    <form asp-action="AssignProvider" asp-route-id="@booking.Id" method="post" class="d-flex gap-2">
+                        <select name="providerId" class="form-select form-select-sm"><option value="">Unassigned</option>@foreach (var provider in Model.Providers) { <option value="@provider.Id" selected="@(booking.ProviderProfileId == provider.Id)">@provider.User.FullName</option> }</select>
+                        <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
+                    </form>
+                </td>
+                <td><span class="status-badge">@booking.Status.ToString().Replace('_', ' ')</span></td>
+                <td><form asp-action="UpdateBookingStatus" asp-route-id="@booking.Id" method="post" class="d-flex gap-2">
+                    <select name="status" class="form-select form-select-sm">@foreach (var status in statuses) { <option value="@status" selected="@(booking.Status == status)">@status.ToString().Replace('_', ' ')</option> }</select>
+                    <button class="btn btn-sm btn-primary" type="submit">Update</button>
+                </form></td>
+            </tr>
+        }
+        </tbody></table></div>
+    }
+</section>

@@ -1,0 +1,14 @@
+@model ProfileVm
+@{
+    ViewData["Title"] = "My profile";
+}
+<div class="auth-wrap"><section class="auth-card">
+    <span class="eyebrow">YOUR ACCOUNT</span><h1 class="h2 mt-2">Profile details</h1>
+    <form asp-action="Profile" method="post" class="mt-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="mb-3"><label asp-for="FullName" class="form-label">Full name</label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
+        <div class="mb-4"><label asp-for="Phone" class="form-label">Phone</label><input asp-for="Phone" class="form-control" /><span asp-validation-for="Phone" class="text-danger"></span></div>
+        <button class="btn btn-primary" type="submit">Save profile</button>
+    </form>
+</section></div>

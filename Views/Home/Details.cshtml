@@ -1,0 +1,35 @@
+@model ServiceDetailsVm
+@{
+    ViewData["Title"] = Model.Service.Name;
+}
+<a asp-action="Index" class="back-link">← All services</a>
+<div class="row g-5 mt-1">
+    <div class="col-lg-7">
+        <span class="badge rounded-pill category-badge">@Model.Service.Category</span>
+        <h1 class="display-5 fw-bold mt-3">@Model.Service.Name</h1>
+        <p class="lead text-secondary">@Model.Service.Description</p>
+        <div class="detail-facts mb-4"><span>⏱ @Model.Service.DurationMinutes minutes</span><span>₹@Model.Service.Price.ToString("0.00")</span></div>
+        <a asp-controller="Customer" asp-action="Book" asp-route-id="@Model.Service.Id" class="btn btn-primary btn-lg">Book this service</a>
+    </div>
+    <div class="col-lg-5">
+        <section class="panel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Customer reviews</h2><span class="text-secondary">@Model.Reviews.Count review(s)</span>
+            </div>
+            @if (Model.Reviews.Count == 0)
+            {
+                <p class="text-secondary mb-0">No reviews yet. Complete a booking to be the first to leave one.</p>
+            }
+            else
+            {
+                @foreach (var review in Model.Reviews)
+                {
+                    <article class="review-item">
+                        <div class="d-flex justify-content-between"><strong>@review.User.FullName</strong><span class="stars">@(new string('★', review.Rating))</span></div>
+                        <p class="mb-1">@review.Comment</p><small class="text-secondary">@review.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</small>
+                    </article>
+                }
+            }
+        </section>
+    </div>
+</div>

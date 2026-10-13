@@ -1,0 +1,28 @@
+@model List<Booking>
+@{
+    ViewData["Title"] = "Customer dashboard";
+}
+<div class="dashboard-heading">
+    <div><span class="eyebrow">YOUR HOME, TAKEN CARE OF</span><h1>Customer dashboard</h1><p class="text-secondary mb-0">Track appointments and find help for your next task.</p></div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Book a service</a>
+</div>
+<div class="row g-3 my-4">
+    <div class="col-sm-6 col-lg-3"><div class="stat-card"><span>Upcoming bookings</span><strong>@ViewBag.UpcomingCount</strong></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="stat-card"><span>Completed jobs</span><strong>@ViewBag.CompletedCount</strong></div></div>
+</div>
+<section class="panel">
+    <div class="panel-heading"><h2 class="h4 mb-0">Recent bookings</h2><a asp-action="Bookings" class="text-link">View all →</a></div>
+    @if (Model.Count == 0)
+    {
+        <div class="empty-inline"><p class="mb-2">You don’t have any bookings yet.</p><a asp-controller="Home" asp-action="Index">Explore services</a></div>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Service</th><th>Date</th><th>Status</th><th>Total</th></tr></thead><tbody>
+        @foreach (var booking in Model)
+        {
+            <tr><td>@booking.Service.Name</td><td>@booking.BookingDate.ToString("dd MMM yyyy")</td><td><span class="status-badge">@booking.Status.ToString().Replace('_', ' ')</span></td><td>₹@booking.TotalPrice.ToString("0.00")</td></tr>
+        }
+        </tbody></table></div>
+    }
+</section>

@@ -1,0 +1,13 @@
+@model List<AppUser>
+@{
+    ViewData["Title"] = "Customers";
+}
+<div class="dashboard-heading"><div><span class="eyebrow">ACCOUNT DIRECTORY</span><h1>Customers</h1></div><a asp-action="Index" class="btn btn-outline-primary">← Dashboard</a></div>
+<section class="panel mt-4">
+    <div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Name</th><th>Email</th><th>Phone</th></tr></thead><tbody>
+    @foreach (var customer in Model)
+    {
+        <tr><td>@customer.FullName</td><td>@customer.Email</td><td>@customer.PhoneNumber</td></tr>
+    }
+    </tbody></table></div>
+</section>

@@ -1,0 +1,22 @@
+@model ServiceVm
+@{
+    var editing = Model.Id > 0;
+    ViewData["Title"] = editing ? "Edit service" : "Add service";
+}
+<div class="dashboard-heading"><div><span class="eyebrow">CATALOG MANAGEMENT</span><h1>@(editing ? "Edit service" : "Add service")</h1></div><a asp-action="Services" class="btn btn-outline-primary">← Services</a></div>
+<section class="panel form-panel mt-4">
+    <form asp-action="@(editing ? "EditService" : "CreateService")" asp-route-id="@Model.Id" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <input asp-for="Id" type="hidden" />
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="Category" class="form-label"></label><input asp-for="Category" class="form-control" /><span asp-validation-for="Category" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="Price" class="form-label">Price (₹)</label><input asp-for="Price" class="form-control" min="1" step="0.01" /><span asp-validation-for="Price" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="DurationMinutes" class="form-label">Duration (minutes)</label><input asp-for="DurationMinutes" class="form-control" min="1" /><span asp-validation-for="DurationMinutes" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control" rows="4"></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+            <div class="col-12"><label asp-for="ImageUrl" class="form-label">Image URL (optional)</label><input asp-for="ImageUrl" class="form-control" /><span asp-validation-for="ImageUrl" class="text-danger"></span></div>
+            <div class="col-12 form-check ms-2"><input asp-for="Active" class="form-check-input" /><label asp-for="Active" class="form-check-label">Visible in the public catalog</label></div>
+        </div>
+        <button class="btn btn-primary mt-4" type="submit">Save service</button>
+    </form>
+</section>

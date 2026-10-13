@@ -1,0 +1,55 @@
+@model ProviderDashboardVm
+@{
+    ViewData["Title"] = "Provider dashboard";
+    var pending = Model.Bookings.Count(x => x.Status == BookingStatus.PENDING);
+    var active = Model.Bookings.Count(x => x.Status is BookingStatus.ACCEPTED or BookingStatus.IN_PROGRESS);
+    var completed = Model.Bookings.Count(x => x.Status == BookingStatus.COMPLETED);
+}
+<div class="dashboard-heading">
+    <div><span class="eyebrow">PROVIDER WORKSPACE</span><h1>Hello, @Model.Provider.User.FullName</h1><p class="text-secondary mb-0">Review assignments and keep customers updated.</p></div>
+    <a asp-action="Profile" class="btn btn-outline-primary">Edit provider profile</a>
+</div>
+<div class="row g-3 my-4">
+    <div class="col-sm-4"><div class="stat-card"><span>Pending requests</span><strong>@pending</strong></div></div>
+    <div class="col-sm-4"><div class="stat-card"><span>Active jobs</span><strong>@active</strong></div></div>
+    <div class="col-sm-4"><div class="stat-card"><span>Completed jobs</span><strong>@completed</strong></div></div>
+</div>
+<section class="panel">
+    <h2 class="h4 mb-3">Assigned bookings</h2>
+    @if (Model.Bookings.Count == 0)
+    {
+        <div class="empty-inline">No bookings are assigned to you yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Customer</th><th>Service</th><th>Date / time</th><th>Address</th><th>Status</th><th>Update</th></tr></thead><tbody>
+        @foreach (var booking in Model.Bookings)
+        {
+            <tr>
+                <td>@booking.Customer.FullName<br /><small class="text-secondary">@booking.Phone</small></td>
+                <td>@booking.Service.Name</td>
+                <td>@booking.BookingDate.ToString("dd MMM yyyy")<br /><small class="text-secondary">@booking.BookingTime</small></td>
+                <td>@booking.Address</td>
+                <td><span class="status-badge">@booking.Status.ToString().Replace('_', ' ')</span></td>
+                <td>
+                    @if (booking.Status == BookingStatus.PENDING)
+                    {
+                        <div class="d-flex gap-2">
+                            <form asp-action="UpdateStatus" asp-route-id="@booking.Id" method="post"><input type="hidden" name="status" value="ACCEPTED" /><button class="btn btn-sm btn-primary" type="submit">Accept</button></form>
+                            <form asp-action="UpdateStatus" asp-route-id="@booking.Id" method="post"><input type="hidden" name="status" value="CANCELLED" /><button class="btn btn-sm btn-outline-danger" type="submit">Reject</button></form>
+                        </div>
+                    }
+                    else if (booking.Status == BookingStatus.ACCEPTED)
+                    {
+                        <form asp-action="UpdateStatus" asp-route-id="@booking.Id" method="post"><input type="hidden" name="status" value="IN_PROGRESS" /><button class="btn btn-sm btn-primary" type="submit">Start work</button></form>
+                    }
+                    else if (booking.Status == BookingStatus.IN_PROGRESS)
+                    {
+                        <form asp-action="UpdateStatus" asp-route-id="@booking.Id" method="post"><input type="hidden" name="status" value="COMPLETED" /><button class="btn btn-sm btn-success" type="submit">Complete</button></form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody></table></div>
+    }
+</section>

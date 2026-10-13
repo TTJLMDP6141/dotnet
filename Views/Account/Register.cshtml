@@ -1,0 +1,64 @@
+@model RegisterVm
+@{
+    ViewData["Title"] = "Create account";
+    var adminEnabled = ViewBag.AdminRegistrationEnabled == true;
+}
+<div class="auth-wrap">
+    <section class="auth-card auth-card-wide">
+        <span class="eyebrow">GET STARTED</span>
+        <h1 class="h2 mt-2">Create your account</h1>
+        <p class="text-secondary">Choose the account type that matches how you’ll use Urban Services.</p>
+        <form asp-action="Register" method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label">Account type</label>
+                <select asp-for="Role" class="form-select" id="role-select">
+                    <option value="CUSTOMER">Customer</option><option value="PROVIDER">Service Provider</option><option value="ADMIN">Administrator</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6 mb-1"><label asp-for="FullName" class="form-label">Full name</label><input asp-for="FullName" class="form-control" autocomplete="name" /><span asp-validation-for="FullName" class="text-danger"></span></div>
+                <div class="col-md-6 mb-1"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" autocomplete="email" /><span asp-validation-for="Email" class="text-danger"></span></div>
+                <div class="col-md-6 mb-1"><label asp-for="Phone" class="form-label">Phone</label><input asp-for="Phone" class="form-control" autocomplete="tel" /><span asp-validation-for="Phone" class="text-danger"></span></div>
+                <div class="col-md-6 mb-1"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" autocomplete="new-password" /><span asp-validation-for="Password" class="text-danger"></span><small class="form-hint">At least 8 characters and a number.</small></div>
+                <div class="col-md-6 mb-1"><label asp-for="ConfirmPassword" class="form-label">Confirm password</label><input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" /><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
+            </div>
+            <div id="provider-fields" class="conditional-fields mt-3">
+                <h2 class="h6">Provider details</h2>
+                <div class="row g-3">
+                    <div class="col-md-4"><label asp-for="Experience" class="form-label">Years of experience</label><input asp-for="Experience" class="form-control" min="0" /><span asp-validation-for="Experience" class="text-danger"></span></div>
+                    <div class="col-md-8"><label asp-for="Availability" class="form-label">Availability</label><input asp-for="Availability" class="form-control" /><span asp-validation-for="Availability" class="text-danger"></span></div>
+                </div>
+            </div>
+            <div id="admin-fields" class="conditional-fields mt-3">
+                @if (adminEnabled)
+                {
+                    <label asp-for="AdminInviteCode" class="form-label">Administrator invite code</label>
+                    <input asp-for="AdminInviteCode" class="form-control" autocomplete="off" />
+                    <span asp-validation-for="AdminInviteCode" class="text-danger"></span>
+                    <small class="form-hint">Only trusted administrators should receive this private code.</small>
+                }
+                else
+                {
+                    <div class="alert alert-warning mb-0">Administrator registration is disabled until the <code>ADMIN_REGISTRATION_CODE</code> environment setting is configured.</div>
+                }
+            </div>
+            <button class="btn btn-primary w-100 btn-lg mt-4" type="submit">Create account</button>
+        </form>
+        <p class="text-center text-secondary mt-4 mb-0">Already have an account? <a asp-action="Login" class="text-link">Sign in</a></p>
+    </section>
+</div>
+@section Scripts {
+<script>
+    const roleSelect = document.getElementById("role-select");
+    const providerFields = document.getElementById("provider-fields");
+    const adminFields = document.getElementById("admin-fields");
+    function updateRoleFields() {
+        providerFields.hidden = roleSelect.value !== "PROVIDER";
+        adminFields.hidden = roleSelect.value !== "ADMIN";
+    }
+    roleSelect.addEventListener("change", updateRoleFields);
+    updateRoleFields();
+</script>
+}

@@ -1,0 +1,26 @@
+@model LoginVm
+@{
+    ViewData["Title"] = "Sign in";
+}
+<div class="auth-wrap">
+    <section class="auth-card">
+        <span class="eyebrow">WELCOME BACK</span>
+        <h1 class="h2 mt-2">Sign in to your account</h1>
+        <p class="text-secondary">Choose your account type and continue to your dashboard.</p>
+        <form asp-action="Login" method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="AccountType" class="form-label">Account type</label>
+                <select asp-for="AccountType" class="form-select">
+                    <option value="CUSTOMER">Customer</option><option value="PROVIDER">Service Provider</option><option value="ADMIN">Administrator</option>
+                </select>
+            </div>
+            <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" autocomplete="username" /><span asp-validation-for="Email" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" autocomplete="current-password" /><span asp-validation-for="Password" class="text-danger"></span></div>
+            <div class="form-check mb-4"><input asp-for="RememberMe" class="form-check-input" /><label asp-for="RememberMe" class="form-check-label">Keep me signed in</label></div>
+            <button class="btn btn-primary w-100 btn-lg" type="submit">Sign in</button>
+        </form>
+        <p class="text-center text-secondary mt-4 mb-0">New here? <a asp-action="Register" class="text-link">Create an account</a></p>
+        <div class="text-center mt-3"><a asp-action="Login" asp-route-accountType="ADMIN" class="small text-link">Admin sign in</a></div>
+    </section>
+</div>

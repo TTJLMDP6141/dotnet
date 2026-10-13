@@ -1,0 +1,56 @@
+@model List<ServiceOffering>
+@{
+    ViewData["Title"] = "Home services, made easy";
+}
+<section class="hero-panel mb-5">
+    <div class="hero-copy">
+        <span class="eyebrow">HOME SERVICES, MADE SIMPLE</span>
+        <h1>Make room for<br /><span>the things you love.</span></h1>
+        <p>Book trusted local help for cleaning, repairs and everyday home care.</p>
+        <a class="btn btn-primary btn-lg" href="#services">Explore services <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+        <div class="art-orbit orbit-one"></div>
+        <div class="art-orbit orbit-two"></div>
+        <div class="art-house"><span class="house-roof"></span><span class="house-body"><i></i><b></b></span></div>
+        <div class="art-spark spark-one">✦</div><div class="art-spark spark-two">✳</div>
+    </div>
+</section>
+
+<section id="services">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div><span class="eyebrow">THE EVERYDAY, HANDLED</span><h2 class="section-title mb-0">Services for a happier home</h2></div>
+        <form asp-controller="Home" asp-action="Index" method="get" class="search-form">
+            <label class="visually-hidden" for="service-search">Search services</label>
+            <input id="service-search" class="form-control" name="q" value="@ViewBag.Query" placeholder="Search services…" />
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state"><h3>No services found</h3><p>Try a different search term.</p></div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var service in Model)
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <article class="service-card h-100">
+                        <div class="service-symbol">@service.Category.Substring(0, 1).ToUpperInvariant()</div>
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+                            <span class="badge rounded-pill category-badge">@service.Category</span>
+                            <span class="service-price">₹@service.Price.ToString("0.00")</span>
+                        </div>
+                        <h3>@service.Name</h3>
+                        <p>@service.Description</p>
+                        <div class="service-card-foot">
+                            <span>@service.DurationMinutes min</span>
+                            <a asp-controller="Home" asp-action="Details" asp-route-id="@service.Id" class="text-link">View details →</a>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    }
+</section>

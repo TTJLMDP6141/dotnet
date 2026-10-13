@@ -1,0 +1,15 @@
+@model ReviewVm
+@{
+    ViewData["Title"] = "Review your service";
+    var booking = (Booking)ViewBag.Booking;
+}
+<div class="auth-wrap"><section class="auth-card">
+    <span class="eyebrow">SHARE YOUR EXPERIENCE</span><h1 class="h2 mt-2">Review @booking.Service.Name</h1>
+    <p class="text-secondary">Your feedback helps other customers choose well.</p>
+    <form asp-action="Review" method="post" class="mt-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div><input asp-for="BookingId" type="hidden" />
+        <div class="mb-3"><label asp-for="Rating" class="form-label">Rating</label><select asp-for="Rating" class="form-select"><option value="5">5 — Excellent</option><option value="4">4 — Very good</option><option value="3">3 — Good</option><option value="2">2 — Fair</option><option value="1">1 — Poor</option></select><span asp-validation-for="Rating" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Comment" class="form-label">Review</label><textarea asp-for="Comment" class="form-control" rows="5"></textarea><span asp-validation-for="Comment" class="text-danger"></span></div>
+        <button class="btn btn-primary w-100" type="submit">Submit review</button>
+    </form>
+</section></div>

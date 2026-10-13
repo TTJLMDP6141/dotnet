@@ -1,0 +1,13 @@
+@model List<ServiceOffering>
+@{
+    ViewData["Title"] = "Manage services";
+}
+<div class="dashboard-heading"><div><span class="eyebrow">CATALOG MANAGEMENT</span><h1>Services</h1></div><div class="d-flex gap-2"><a asp-action="Index" class="btn btn-outline-primary">Dashboard</a><a asp-action="CreateService" class="btn btn-primary">Add service</a></div></div>
+<section class="panel mt-4">
+    <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Service</th><th>Category</th><th>Price</th><th>Duration</th><th>Visibility</th><th>Actions</th></tr></thead><tbody>
+    @foreach (var service in Model)
+    {
+        <tr><td><strong>@service.Name</strong><br /><small class="text-secondary">@service.Description</small></td><td>@service.Category</td><td>₹@service.Price.ToString("0.00")</td><td>@service.DurationMinutes min</td><td><span class="status-badge">@((service.Active) ? "Active" : "Inactive")</span></td><td><div class="d-flex gap-2"><a asp-action="EditService" asp-route-id="@service.Id" class="btn btn-sm btn-outline-primary">Edit</a><form asp-action="DeleteService" asp-route-id="@service.Id" method="post"><button class="btn btn-sm btn-outline-danger" type="submit">Delete</button></form></div></td></tr>
+    }
+    </tbody></table></div>
+</section>

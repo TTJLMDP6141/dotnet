@@ -1,0 +1,30 @@
+@model BookingVm
+@{
+    ViewData["Title"] = "Book a service";
+    var service = (ServiceOffering)ViewBag.Service;
+}
+<a asp-controller="Home" asp-action="Details" asp-route-id="@service.Id" class="back-link">← Back to service</a>
+<div class="row g-4 mt-2">
+    <div class="col-lg-5">
+        <section class="panel booking-summary">
+            <span class="eyebrow">YOUR SERVICE</span><h1 class="h3 mt-2">@service.Name</h1><p class="text-secondary">@service.Description</p>
+            <div class="d-flex justify-content-between border-top pt-3"><span>@service.DurationMinutes minutes</span><strong>₹@service.Price.ToString("0.00")</strong></div>
+        </section>
+    </div>
+    <div class="col-lg-7">
+        <section class="panel">
+            <h2 class="h4">Choose a date and time</h2>
+            <form asp-action="Book" method="post" class="mt-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input asp-for="ServiceId" type="hidden" />
+                <div class="row g-3">
+                    <div class="col-md-6"><label asp-for="BookingDate" class="form-label">Booking date</label><input asp-for="BookingDate" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" /><span asp-validation-for="BookingDate" class="text-danger"></span></div>
+                    <div class="col-md-6"><label asp-for="BookingTime" class="form-label">Time slot</label><select asp-for="BookingTime" class="form-select"><option value="">Select a time</option>@foreach (string slot in (string[])ViewBag.TimeSlots) { <option value="@slot" selected="@(slot == Model.BookingTime)">@slot</option> }</select><span asp-validation-for="BookingTime" class="text-danger"></span></div>
+                    <div class="col-12"><label asp-for="Phone" class="form-label">Contact phone</label><input asp-for="Phone" class="form-control" /><span asp-validation-for="Phone" class="text-danger"></span></div>
+                    <div class="col-12"><label asp-for="Address" class="form-label">Service address</label><textarea asp-for="Address" class="form-control" rows="3" placeholder="Street, city, postal code"></textarea><span asp-validation-for="Address" class="text-danger"></span></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg mt-4">Confirm booking</button>
+            </form>
+        </section>
+    </div>
+</div>
